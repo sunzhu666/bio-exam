@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初中生物组卷系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>初中生物组卷系统</h1>
+        <p>符合教育部《义务教育生物学课程标准(2022年版)》 | 题库共150+道精选试题</p>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h3>知识点筛选</h3>
+                <select id="unitSelect">
+                    <option value="">全部单元</option>
+                </select>
+            </div>
+            <div class="filter-section">
+                <h3>题型筛选</h3>
+                <select id="typeSelect">
+                    <option value="">全部题型</option>
+                    <option value="choice">选择题</option>
+                    <option value="blank">填空题</option>
+                    <option value="judge">判断题</option>
+                    <option value="short">简答题</option>
+                    <option value="experiment">实验探究题</option>
+                </select>
+            </div>
+            <div class="filter-section">
+                <h3>难度筛选</h3>
+                <select id="difficultySelect">
+                    <option value="">全部难度</option>
+                    <option value="easy">简单</option>
+                    <option value="medium">中等</option>
+                    <option value="hard">较难</option>
+                </select>
+            </div>
+            <button id="filterBtn" class="btn btn-primary">筛选试题</button>
+        </aside>
+
+        <main class="main-content">
+            <div class="question-list" id="questionList"></div>
+        </main>
+
+        <aside class="paper-panel">
+            <h3>我的试卷 <span id="paperCount">0</span>题</h3>
+            <div class="paper-info">
+                <p>总分：<span id="totalScore">0</span>分</p>
+            </div>
+            <div id="paperList" class="paper-list"></div>
+            <div class="paper-actions">
+                <button id="previewBtn" class="btn">预览试卷</button>
+                <button id="clearBtn" class="btn btn-danger">清空试卷</button>
+            </div>
+        </aside>
+    </div>
+
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="paperPreview"></div>
+            <button id="printBtn" class="btn btn-primary">打印试卷</button>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
