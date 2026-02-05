@@ -13,7 +13,8 @@ const questionBank = {
         { id: "unit10", name: "生物的生殖和发育" },
         { id: "unit11", name: "生物的遗传和变异" },
         { id: "unit12", name: "生物的进化" },
-        { id: "unit13", name: "生物与环境" }
+        { id: "unit13", name: "生物与环境" },
+        { id: "exam", name: "中考真题" }
     ],
     questions: []
 };
