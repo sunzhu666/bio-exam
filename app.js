@@ -843,8 +843,35 @@ app.showStats = function() {
     console.log(`题库统计：共${total}题（选择${stats.choice}、判断${stats.judge}、简答${stats.short}、实验${stats.experiment}）`);
 };
 
+// 将HTML中的相对图片路径转为base64
+app.convertImagesToBase64 = async function(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const imgs = doc.querySelectorAll('img');
+    const baseUrl = window.location.href.replace(/\/[^/]*$/, '/');
+
+    for (const img of imgs) {
+        const src = img.getAttribute('src');
+        if (!src || src.startsWith('data:')) continue;
+        const fullUrl = src.startsWith('http') ? src : baseUrl + src;
+        try {
+            const resp = await fetch(fullUrl);
+            const blob = await resp.blob();
+            const base64 = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+            });
+            img.setAttribute('src', base64);
+        } catch (e) {
+            console.warn('图片转换失败:', src, e);
+        }
+    }
+    return doc.documentElement.outerHTML;
+};
+
 // Word导出功能
-app.exportWord = function() {
+app.exportWord = async function() {
     if (this.paper.length === 0) {
         alert('请先添加试题到试卷');
         return;
@@ -874,7 +901,7 @@ app.exportWord = function() {
                 .question { margin: 15px 0; }
                 .options { margin-left: 20px; }
                 .option { margin: 5px 0; }
-                .blank { margin: 20px 0; }
+                img { max-width: 300px; max-height: 200px; vertical-align: middle; }
                 .answer-area { border-bottom: 1px solid #000; height: 100px; margin: 10px 0; }
                 table { width: 100%; border-collapse: collapse; margin: 20px 0; }
                 td { border: 1px solid #000; padding: 8px; text-align: center; }
@@ -941,8 +968,11 @@ app.exportWord = function() {
 
     html += '</body></html>';
 
+    // 将图片转为base64嵌入
+    html = await this.convertImagesToBase64(html);
+
     // 创建Blob并下载
-    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+    const blob = new Blob(['\ufeff' + html], { type: 'application/msword;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
