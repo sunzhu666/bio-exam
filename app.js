@@ -653,7 +653,11 @@ const app = {
         if (typeof giantGen170 !== 'undefined') {
             questionBank.questions = [...questionBank.questions, ...giantGen170.generateAll()];
         }
-                // 加载周练题目
+        // 加载中考真题
+        if (typeof examQuestions !== 'undefined') {
+            questionBank.questions = [...questionBank.questions, ...examQuestions];
+        }
+        // 加载周练题目
         if (typeof weeklyQuestions !== 'undefined') {
             questionBank.questions = [...questionBank.questions, ...weeklyQuestions];
         }
