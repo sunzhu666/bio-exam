@@ -700,7 +700,7 @@ const app = {
     },
 
     createQuestionCard(q) {
-        const typeMap = { choice: '选择题', blank: '填空题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
+        const typeMap = { choice: '选择题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
         const diffMap = { easy: '简单', medium: '中等', hard: '较难' };
         const unitName = questionBank.units.find(u => u.id === q.unit)?.name || '';
         const inPaper = this.paper.some(p => p.id === q.id);
@@ -764,7 +764,7 @@ app.updatePaperPanel = function() {
     countEl.textContent = this.paper.length;
     scoreEl.textContent = totalScore;
 
-    const typeMap = { choice: '选择', blank: '填空', judge: '判断', short: '简答', experiment: '实验' };
+    const typeMap = { choice: '选择', judge: '判断', short: '简答', experiment: '实验' };
     listEl.innerHTML = this.paper.map((q, i) => `
         <div class="paper-item">
             <span>${i + 1}. ${typeMap[q.type]} (${q.score}分)</span>
@@ -788,7 +788,7 @@ app.showPreview = function() {
         return;
     }
     const preview = document.getElementById('paperPreview');
-    const typeMap = { choice: '选择题', blank: '填空题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
+    const typeMap = { choice: '选择题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
     const totalScore = this.paper.reduce((sum, q) => sum + q.score, 0);
 
     // 按题型分组
@@ -800,7 +800,7 @@ app.showPreview = function() {
 
     let html = `<h2>初中生物测试卷</h2><p style="text-align:center">总分：${totalScore}分</p><hr>`;
     let qNum = 1;
-    const typeOrder = ['choice', 'blank', 'judge', 'short', 'experiment'];
+    const typeOrder = ['choice', 'judge', 'short', 'experiment'];
 
     typeOrder.forEach(type => {
         if (!grouped[type]) return;
@@ -828,12 +828,11 @@ app.showStats = function() {
     const total = questionBank.questions.length;
     const stats = {
         choice: questionBank.questions.filter(q => q.type === 'choice').length,
-        blank: questionBank.questions.filter(q => q.type === 'blank').length,
         judge: questionBank.questions.filter(q => q.type === 'judge').length,
         short: questionBank.questions.filter(q => q.type === 'short').length,
         experiment: questionBank.questions.filter(q => q.type === 'experiment').length
     };
-    console.log(`题库统计：共${total}题（选择${stats.choice}、填空${stats.blank}、判断${stats.judge}、简答${stats.short}、实验${stats.experiment}）`);
+    console.log(`题库统计：共${total}题（选择${stats.choice}、判断${stats.judge}、简答${stats.short}、实验${stats.experiment}）`);
 };
 
 // Word导出功能
@@ -843,7 +842,7 @@ app.exportWord = function() {
         return;
     }
 
-    const typeMap = { choice: '选择题', blank: '填空题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
+    const typeMap = { choice: '选择题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
     const totalScore = this.paper.reduce((sum, q) => sum + q.score, 0);
 
     // 按题型分组
@@ -882,7 +881,7 @@ app.exportWord = function() {
     `;
 
     let qNum = 1;
-    const typeOrder = ['choice', 'blank', 'judge', 'short', 'experiment'];
+    const typeOrder = ['choice', 'judge', 'short', 'experiment'];
 
     typeOrder.forEach(type => {
         if (!grouped[type]) return;

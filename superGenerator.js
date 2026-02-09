@@ -175,38 +175,7 @@ const superGenerator = {
         this.baseId = id; return qs;
     },
 
-    // 填空题库
-    genBlanks() {
-        const qs = []; let id = this.baseId;
-        const blanks = [
-            {c:"细胞是生物体______和______的基本单位。",a:"结构、功能",u:"unit2"},
-            {c:"植物细胞特有的结构有______、______和______。",a:"细胞壁、叶绿体、液泡",u:"unit2"},
-            {c:"光合作用的场所是______，条件是______。",a:"叶绿体、光",u:"unit4"},
-            {c:"呼吸作用的场所是______，实质是分解______释放______。",a:"线粒体、有机物、能量",u:"unit4"},
-            {c:"人体需要的六大营养物质是______、______、______、______、______和______。",a:"糖类、蛋白质、脂肪、维生素、无机盐、水",u:"unit5"},
-            {c:"消化系统由______和______组成。",a:"消化道、消化腺",u:"unit5"},
-            {c:"呼吸系统由______和______组成。",a:"呼吸道、肺",u:"unit6"},
-            {c:"血液由______和______组成。",a:"血浆、血细胞",u:"unit7"},
-            {c:"心脏有______个腔。",a:"四",u:"unit7"},
-            {c:"泌尿系统由______、______、______和______组成。",a:"肾脏、输尿管、膀胱、尿道",u:"unit8"},
-            {c:"神经系统由______和______组成。",a:"中枢神经系统、周围神经系统",u:"unit9"},
-            {c:"反射弧由______、______、______、______和______五部分组成。",a:"感受器、传入神经、神经中枢、传出神经、效应器",u:"unit9"},
-            {c:"人体细胞中有______对染色体。",a:"23",u:"unit11"},
-            {c:"男性的性染色体组成是______，女性的是______。",a:"XY、XX",u:"unit11"},
-            {c:"基因是有______的______片段。",a:"遗传效应、DNA",u:"unit11"},
-            {c:"自然选择学说的提出者是______。",a:"达尔文",u:"unit12"},
-            {c:"生态系统的组成包括______和______两部分。",a:"生物部分、非生物部分",u:"unit13"},
-            {c:"能量流动的特点是______和______。",a:"单向流动、逐级递减",u:"unit13"},
-            {c:"生产者主要是______，消费者主要是______，分解者主要是______。",a:"绿色植物、动物、细菌和真菌",u:"unit13"},
-            {c:"完全变态发育经历______、______、______、______四个时期。",a:"卵、幼虫、蛹、成虫",u:"unit10"}
-        ];
-        blanks.forEach(item => {
-            qs.push({id:id++,type:"blank",unit:item.u,difficulty:this.pick(["easy","medium","hard"]),score:3,content:item.c,answer:item.a,analysis:`答案是${item.a}。`});
-        });
-        this.baseId = id; return qs;
-    },
-
     generateAll() {
-        return [...this.genNutrients(),...this.genHormones(),...this.genGenetics(),...this.genEcology(),...this.genExperiments(),...this.genJudge(),...this.genBlanks()];
+        return [...this.genNutrients(),...this.genHormones(),...this.genGenetics(),...this.genEcology(),...this.genExperiments(),...this.genJudge()];
     }
 };

@@ -93,28 +93,6 @@ questionBank.questions.push(
     }
 );
 
-// 填空题
-questionBank.questions.push(
-    {
-        id: 11, type: "blank", unit: "unit2", difficulty: "easy", score: 3,
-        content: "细胞中的能量转换器有______和______，其中______能将光能转变成化学能。",
-        answer: "叶绿体、线粒体、叶绿体",
-        analysis: "叶绿体进行光合作用，将光能转化为化学能；线粒体进行呼吸作用，将化学能转化为其他形式能量。"
-    },
-    {
-        id: 12, type: "blank", unit: "unit4", difficulty: "medium", score: 3,
-        content: "绿色植物通过______作用吸收二氧化碳，释放______，维持生物圈中的碳-氧平衡。",
-        answer: "光合、氧气",
-        analysis: "光合作用的原料是二氧化碳和水，产物是有机物和氧气。"
-    },
-    {
-        id: 13, type: "blank", unit: "unit7", difficulty: "medium", score: 3,
-        content: "人体血液循环分为______循环和______循环，其中______循环的起点是左心室。",
-        answer: "体、肺、体",
-        analysis: "体循环：左心室→主动脉→全身毛细血管→上下腔静脉→右心房。肺循环：右心室→肺动脉→肺部毛细血管→肺静脉→左心房。"
-    }
-);
-
 // 判断题
 questionBank.questions.push(
     {
@@ -206,22 +184,6 @@ questionBank.questions.push(
         options: ["A. 血液", "B. 心肌", "C. 心脏", "D. 循环系统"],
         answer: "C",
         analysis: "血液是结缔组织，心肌是肌肉组织，心脏由多种组织构成是器官，循环系统是系统。"
-    }
-);
-
-// 更多填空题
-questionBank.questions.push(
-    {
-        id: 26, type: "blank", unit: "unit9", difficulty: "medium", score: 3,
-        content: "完成反射活动的神经结构叫______，它由______、传入神经、神经中枢、传出神经和______五部分组成。",
-        answer: "反射弧、感受器、效应器",
-        analysis: "反射弧是完成反射的神经结构，缺少任何一部分反射都不能完成。"
-    },
-    {
-        id: 27, type: "blank", unit: "unit10", difficulty: "easy", score: 3,
-        content: "有性生殖的优点是后代具有______的遗传特性，有利于______。",
-        answer: "双亲、适应环境变化",
-        analysis: "有性生殖产生的后代具有双亲的遗传物质，变异更丰富，适应能力更强。"
     }
 );
 
@@ -741,40 +703,6 @@ questionBank.questions.push(
     }
 );
 
-// ========== 更多填空题 ==========
-questionBank.questions.push(
-    {
-        id: 94, type: "blank", unit: "unit1", difficulty: "easy", score: 3,
-        content: "生物的特征包括：需要______、能进行______、能排出体内产生的______、能对外界刺激作出______、能______和______。",
-        answer: "营养、呼吸、废物、反应、生长、繁殖",
-        analysis: "这是生物的基本特征，是区分生物和非生物的重要依据。"
-    },
-    {
-        id: 95, type: "blank", unit: "unit3", difficulty: "medium", score: 3,
-        content: "人体的结构层次从小到大依次是：______→______→______→______→人体。",
-        answer: "细胞、组织、器官、系统",
-        analysis: "人体的结构层次：细胞→组织→器官→系统→人体。"
-    },
-    {
-        id: 96, type: "blank", unit: "unit5", difficulty: "medium", score: 3,
-        content: "淀粉在口腔中被______初步分解为______，在小肠中被彻底分解为______。",
-        answer: "唾液淀粉酶、麦芽糖、葡萄糖",
-        analysis: "淀粉的消化：淀粉→麦芽糖→葡萄糖，最终产物是葡萄糖。"
-    },
-    {
-        id: 97, type: "blank", unit: "unit6", difficulty: "easy", score: 3,
-        content: "呼吸作用的实质是分解______，释放______，为生命活动提供动力。",
-        answer: "有机物、能量",
-        analysis: "呼吸作用是分解有机物，释放能量的过程，是生物的基本生命活动。"
-    },
-    {
-        id: 98, type: "blank", unit: "unit8", difficulty: "hard", score: 3,
-        content: "血液流经肾小球时，除______和______外，其他物质都能过滤到肾小囊中形成______。",
-        answer: "血细胞、大分子蛋白质、原尿",
-        analysis: "肾小球的过滤作用：血细胞和大分子蛋白质不能通过，其他物质形成原尿。"
-    }
-);
-
 // ========== 更多判断题 ==========
 questionBank.questions.push(
     {
@@ -1008,28 +936,6 @@ questionBank.questions.push(
         options: ["A. 细胞分化导致细胞数目增多", "B. 细胞分化导致细胞体积增大", "C. 细胞分化形成不同的组织", "D. 细胞分化改变了遗传物质"],
         answer: "C",
         analysis: "细胞分化是细胞在形态、结构和功能上发生差异的过程，形成不同的组织。"
-    }
-);
-
-// 更多填空题
-questionBank.questions.push(
-    {
-        id: 131, type: "blank", unit: "unit11", difficulty: "hard", score: 4,
-        content: "人的体细胞中有______对染色体，其中______对是常染色体，______对是性染色体。男性的性染色体组成是______，女性的性染色体组成是______。",
-        answer: "23、22、1、XY、XX",
-        analysis: "人体细胞有23对染色体，22对常染色体决定性别以外的性状，1对性染色体决定性别。"
-    },
-    {
-        id: 132, type: "blank", unit: "unit13", difficulty: "medium", score: 3,
-        content: "生态系统的组成包括______部分和______部分。其中生物部分包括______、______和______。",
-        answer: "生物、非生物、生产者、消费者、分解者",
-        analysis: "生态系统由生物部分（生产者、消费者、分解者）和非生物部分（阳光、空气、水等）组成。"
-    },
-    {
-        id: 133, type: "blank", unit: "unit4", difficulty: "hard", score: 4,
-        content: "光合作用的原料是______和______，产物是______和______，条件是______，场所是______。",
-        answer: "二氧化碳、水、有机物、氧气、光、叶绿体",
-        analysis: "光合作用：二氧化碳+水→(光/叶绿体)有机物+氧气。"
     }
 );
 

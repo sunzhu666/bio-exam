@@ -607,58 +607,6 @@ const questionGenerator = {
         return questions;
     },
 
-    // 生成大量填空题
-    generateMassBlankQuestions() {
-        const questions = [];
-        let id = 1200;
-
-        const blankItems = [
-            {content: "细胞是生物体______和______的基本单位。", answer: "结构、功能", unit: "unit2"},
-            {content: "植物细胞特有的结构有______、______和______。", answer: "细胞壁、叶绿体、液泡", unit: "unit2"},
-            {content: "动物细胞的基本结构包括______、______和______。", answer: "细胞膜、细胞质、细胞核", unit: "unit2"},
-            {content: "细胞分裂时，______先分裂，然后______分裂。", answer: "细胞核、细胞质", unit: "unit2"},
-            {content: "人体的四种基本组织是______、______、______和______。", answer: "上皮组织、肌肉组织、结缔组织、神经组织", unit: "unit3"},
-            {content: "植物的六大器官是______、______、______、______、______和______。", answer: "根、茎、叶、花、果实、种子", unit: "unit3"},
-            {content: "光合作用的场所是______，条件是______。", answer: "叶绿体、光", unit: "unit4"},
-            {content: "呼吸作用的场所是______，实质是分解______释放______。", answer: "线粒体、有机物、能量", unit: "unit4"},
-            {content: "蒸腾作用的主要器官是______，主要部位是______。", answer: "叶、气孔", unit: "unit4"},
-            {content: "人体需要的六大营养物质是______、______、______、______、______和______。", answer: "糖类、蛋白质、脂肪、维生素、无机盐、水", unit: "unit5"},
-            {content: "消化系统由______和______组成。", answer: "消化道、消化腺", unit: "unit5"},
-            {content: "呼吸系统由______和______组成。", answer: "呼吸道、肺", unit: "unit6"},
-            {content: "血液由______和______组成，血细胞包括______、______和______。", answer: "血浆、血细胞、红细胞、白细胞、血小板", unit: "unit7"},
-            {content: "心脏有______个腔，分别是______、______、______和______。", answer: "四、左心房、左心室、右心房、右心室", unit: "unit7"},
-            {content: "泌尿系统由______、______、______和______组成。", answer: "肾脏、输尿管、膀胱、尿道", unit: "unit8"},
-            {content: "尿液形成包括______和______两个过程。", answer: "肾小球的过滤作用、肾小管的重吸收作用", unit: "unit8"},
-            {content: "神经系统由______和______组成。", answer: "中枢神经系统、周围神经系统", unit: "unit9"},
-            {content: "反射弧由______、______、______、______和______五部分组成。", answer: "感受器、传入神经、神经中枢、传出神经、效应器", unit: "unit9"},
-            {content: "人体内主要的内分泌腺有______、______、______、______等。", answer: "垂体、甲状腺、胰岛、肾上腺", unit: "unit9"},
-            {content: "有性生殖的特点是经过______的结合。", answer: "两性生殖细胞", unit: "unit10"},
-            {content: "完全变态发育经历______、______、______、______四个时期。", answer: "卵、幼虫、蛹、成虫", unit: "unit10"},
-            {content: "人体细胞中有______对染色体，其中______对常染色体，______对性染色体。", answer: "23、22、1", unit: "unit11"},
-            {content: "基因是有______的______片段。", answer: "遗传效应、DNA", unit: "unit11"},
-            {content: "生物进化的证据有______、______、______等。", answer: "化石、比较解剖学、胚胎学", unit: "unit12"},
-            {content: "自然选择学说的提出者是______。", answer: "达尔文", unit: "unit12"},
-            {content: "生态系统的组成包括______和______两部分。", answer: "生物部分、非生物部分", unit: "unit13"},
-            {content: "生态系统中的生物部分包括______、______和______。", answer: "生产者、消费者、分解者", unit: "unit13"},
-            {content: "能量流动的特点是______和______。", answer: "单向流动、逐级递减", unit: "unit13"}
-        ];
-
-        blankItems.forEach(item => {
-            questions.push({
-                id: id++,
-                type: "blank",
-                unit: item.unit,
-                difficulty: this.pick(["easy", "medium", "hard"]),
-                score: 3,
-                content: item.content,
-                answer: item.answer,
-                analysis: `答案是${item.answer}。`
-            });
-        });
-
-        return questions;
-    },
-
     // 生成更多变体选择题
     generateVariantChoiceQuestions() {
         const questions = [];
@@ -823,7 +771,6 @@ const questionGenerator = {
             ...this.generateMassClassificationQuestions(),
             ...this.generateMassHumanBodyQuestions(),
             ...this.generateMassJudgeQuestions(),
-            ...this.generateMassBlankQuestions(),
             ...this.generateVariantChoiceQuestions(),
             ...this.generateExperimentQuestions(),
             ...this.generateShortAnswerQuestions()
