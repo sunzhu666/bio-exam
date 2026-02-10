@@ -661,6 +661,10 @@ const app = {
         if (typeof weeklyQuestions !== 'undefined') {
             questionBank.questions = [...questionBank.questions, ...weeklyQuestions];
         }
+        // 加载批量导入题目
+        if (typeof newQuestions !== 'undefined') {
+            questionBank.questions = [...questionBank.questions, ...newQuestions];
+        }
     },
 
     initUnitSelect() {
