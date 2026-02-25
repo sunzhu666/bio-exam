@@ -1,790 +1,426 @@
-// 初中生物组卷系统 - 主逻辑
+// 初中生物组卷系统 - 增强版主逻辑
 const app = {
     paper: [],
     filteredQuestions: [],
+    favorites: JSON.parse(localStorage.getItem('bioExamFavorites') || '[]'),
+    currentPage: 1,
+    pageSize: 20,
+    showingFavorites: false,
+    filters: { unit: '', type: '', difficulty: '', source: '', keyword: '' },
 
     init() {
-        // 加载生成的题目
         this.loadGeneratedQuestions();
-        this.initUnitSelect();
         this.filteredQuestions = [...questionBank.questions];
+        this.renderUnitTags();
         this.renderQuestions();
         this.bindEvents();
-        this.showStats();
-        // 显示题目总数
+        this.updateStats();
+        this.updateFavCount();
         document.getElementById('totalQuestions').textContent = questionBank.questions.length;
     },
 
     loadGeneratedQuestions() {
-        // 合并所有生成器生成的题目
-        if (typeof questionGenerator !== 'undefined') {
-            const generated = questionGenerator.generateAll();
-            questionBank.questions = [...questionBank.questions, ...generated];
-        }
-        if (typeof massGenerator !== 'undefined') {
-            const mass = massGenerator.generateAll();
-            questionBank.questions = [...questionBank.questions, ...mass];
-        }
-        if (typeof megaGenerator !== 'undefined') {
-            const mega = megaGenerator.generateAll();
-            questionBank.questions = [...questionBank.questions, ...mega];
-        }
-        if (typeof superGenerator !== 'undefined') {
-            const superQ = superGenerator.generateAll();
-            questionBank.questions = [...questionBank.questions, ...superQ];
-        }
-        if (typeof hugeGenerator !== 'undefined') {
-            const huge = hugeGenerator.generateAll();
-            questionBank.questions = [...questionBank.questions, ...huge];
-        }
-        if (typeof ultimateGenerator !== 'undefined') {
-            const ultimate = ultimateGenerator.generateAll();
-            questionBank.questions = [...questionBank.questions, ...ultimate];
-        }
-        if (typeof extraGenerator1 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator1.generateAll()];
-        }
-        if (typeof extraGenerator2 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator2.generateAll()];
-        }
-        if (typeof extraGenerator3 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator3.generateAll()];
-        }
-        if (typeof extraGenerator4 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator4.generateAll()];
-        }
-        if (typeof extraGenerator5 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator5.generateAll()];
-        }
-        if (typeof extraGenerator6 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator6.generateAll()];
-        }
-        if (typeof extraGenerator7 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator7.generateAll()];
-        }
-        if (typeof extraGenerator8 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator8.generateAll()];
-        }
-        if (typeof extraGenerator9 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator9.generateAll()];
-        }
-        if (typeof extraGenerator10 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...extraGenerator10.generateAll()];
-        }
-        if (typeof megaGenA !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenA.generateAll()];
-        }
-        if (typeof megaGenB !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenB.generateAll()];
-        }
-        if (typeof megaGenC !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenC.generateAll()];
-        }
-        if (typeof megaGenD !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenD.generateAll()];
-        }
-        if (typeof megaGenE !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenE.generateAll()];
-        }
-        if (typeof megaGenF !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenF.generateAll()];
-        }
-        if (typeof megaGenG !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenG.generateAll()];
-        }
-        if (typeof megaGenH !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenH.generateAll()];
-        }
-        if (typeof megaGenI !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenI.generateAll()];
-        }
-        if (typeof megaGenJ !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...megaGenJ.generateAll()];
-        }
-        if (typeof ultraGen1 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...ultraGen1.generateAll()];
-        }
-        if (typeof ultraGen2 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...ultraGen2.generateAll()];
-        }
-        if (typeof ultraGen3 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...ultraGen3.generateAll()];
-        }
-        if (typeof ultraGen4 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...ultraGen4.generateAll()];
-        }
-        if (typeof massiveGenA !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenA.generateAll()];
-        }
-        if (typeof massiveGenB !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenB.generateAll()];
-        }
-        if (typeof massiveGenC !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenC.generateAll()];
-        }
-        if (typeof massiveGenD !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenD.generateAll()];
-        }
-        if (typeof massiveGenE !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenE.generateAll()];
-        }
-        if (typeof massiveGenF !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenF.generateAll()];
-        }
-        if (typeof massiveGenG !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenG.generateAll()];
-        }
-        if (typeof massiveGenH !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenH.generateAll()];
-        }
-        if (typeof massiveGenI !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenI.generateAll()];
-        }
-        if (typeof massiveGenJ !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...massiveGenJ.generateAll()];
-        }
-        if (typeof giantGen1 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen1.generateAll()];
-        }
-        if (typeof giantGen2 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen2.generateAll()];
-        }
-        if (typeof giantGen3 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen3.generateAll()];
-        }
-        if (typeof giantGen4 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen4.generateAll()];
-        }
-        if (typeof giantGen5 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen5.generateAll()];
-        }
-        if (typeof giantGen6 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen6.generateAll()];
-        }
-        if (typeof giantGen7 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen7.generateAll()];
-        }
-        if (typeof giantGen8 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen8.generateAll()];
-        }
-        if (typeof giantGen9 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen9.generateAll()];
-        }
-        if (typeof giantGen10 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen10.generateAll()];
-        }
-        if (typeof giantGen11 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen11.generateAll()];
-        }
-        if (typeof giantGen12 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen12.generateAll()];
-        }
-        if (typeof giantGen13 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen13.generateAll()];
-        }
-        if (typeof giantGen14 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen14.generateAll()];
-        }
-        if (typeof giantGen15 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen15.generateAll()];
-        }
-        if (typeof giantGen16 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen16.generateAll()];
-        }
-        if (typeof giantGen17 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen17.generateAll()];
-        }
-        if (typeof giantGen18 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen18.generateAll()];
-        }
-        if (typeof giantGen19 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen19.generateAll()];
-        }
-        if (typeof giantGen20 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen20.generateAll()];
-        }
-        if (typeof giantGen21 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen21.generateAll()];
-        }
-        if (typeof giantGen22 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen22.generateAll()];
-        }
-        if (typeof giantGen23 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen23.generateAll()];
-        }
-        if (typeof giantGen24 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen24.generateAll()];
-        }
-        if (typeof giantGen25 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen25.generateAll()];
-        }
-        if (typeof giantGen26 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen26.generateAll()];
-        }
-        if (typeof giantGen27 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen27.generateAll()];
-        }
-        if (typeof giantGen28 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen28.generateAll()];
-        }
-        if (typeof giantGen29 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen29.generateAll()];
-        }
-        if (typeof giantGen30 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen30.generateAll()];
-        }
-        if (typeof giantGen31 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen31.generateAll()];
-        }
-        if (typeof giantGen32 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen32.generateAll()];
-        }
-        if (typeof giantGen33 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen33.generateAll()];
-        }
-        if (typeof giantGen34 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen34.generateAll()];
-        }
-        if (typeof giantGen35 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen35.generateAll()];
-        }
-        if (typeof giantGen36 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen36.generateAll()];
-        }
-        if (typeof giantGen37 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen37.generateAll()];
-        }
-        if (typeof giantGen38 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen38.generateAll()];
-        }
-        if (typeof giantGen39 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen39.generateAll()];
-        }
-        if (typeof giantGen40 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen40.generateAll()];
-        }
-        if (typeof giantGen41 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen41.generateAll()];
-        }
-        if (typeof giantGen42 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen42.generateAll()];
-        }
-        if (typeof giantGen43 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen43.generateAll()];
-        }
-        if (typeof giantGen44 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen44.generateAll()];
-        }
-        if (typeof giantGen45 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen45.generateAll()];
-        }
-        if (typeof giantGen46 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen46.generateAll()];
-        }
-        if (typeof giantGen47 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen47.generateAll()];
-        }
-        if (typeof giantGen48 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen48.generateAll()];
-        }
-        if (typeof giantGen49 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen49.generateAll()];
-        }
-        if (typeof giantGen50 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen50.generateAll()];
-        }
-        if (typeof giantGen51 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen51.generateAll()];
-        }
-        if (typeof giantGen52 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen52.generateAll()];
-        }
-        if (typeof giantGen53 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen53.generateAll()];
-        }
-        if (typeof giantGen54 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen54.generateAll()];
-        }
-        if (typeof giantGen55 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen55.generateAll()];
-        }
-        if (typeof giantGen56 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen56.generateAll()];
-        }
-        if (typeof giantGen57 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen57.generateAll()];
-        }
-        if (typeof giantGen58 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen58.generateAll()];
-        }
-        if (typeof giantGen59 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen59.generateAll()];
-        }
-        if (typeof giantGen60 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen60.generateAll()];
-        }
-        if (typeof giantGen61 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen61.generateAll()];
-        }
-        if (typeof giantGen62 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen62.generateAll()];
-        }
-        if (typeof giantGen63 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen63.generateAll()];
-        }
-        if (typeof giantGen64 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen64.generateAll()];
-        }
-        if (typeof giantGen65 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen65.generateAll()];
-        }
-        if (typeof giantGen66 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen66.generateAll()];
-        }
-        if (typeof giantGen67 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen67.generateAll()];
-        }
-        if (typeof giantGen68 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen68.generateAll()];
-        }
-        if (typeof giantGen69 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen69.generateAll()];
-        }
-        if (typeof giantGen70 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen70.generateAll()];
-        }
-        if (typeof giantGen71 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen71.generateAll()];
-        }
-        if (typeof giantGen72 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen72.generateAll()];
-        }
-        if (typeof giantGen73 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen73.generateAll()];
-        }
-        if (typeof giantGen74 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen74.generateAll()];
-        }
-        if (typeof giantGen75 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen75.generateAll()];
-        }
-        if (typeof giantGen76 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen76.generateAll()];
-        }
-        if (typeof giantGen77 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen77.generateAll()];
-        }
-        if (typeof giantGen78 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen78.generateAll()];
-        }
-        if (typeof giantGen79 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen79.generateAll()];
-        }
-        if (typeof giantGen80 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen80.generateAll()];
-        }
-        if (typeof giantGen81 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen81.generateAll()];
-        }
-        if (typeof giantGen82 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen82.generateAll()];
-        }
-        if (typeof giantGen83 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen83.generateAll()];
-        }
-        if (typeof giantGen84 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen84.generateAll()];
-        }
-        if (typeof giantGen85 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen85.generateAll()];
-        }
-        if (typeof giantGen86 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen86.generateAll()];
-        }
-        if (typeof giantGen87 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen87.generateAll()];
-        }
-        if (typeof giantGen88 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen88.generateAll()];
-        }
-        if (typeof giantGen89 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen89.generateAll()];
-        }
-        if (typeof giantGen90 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen90.generateAll()];
-        }
-        if (typeof giantGen91 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen91.generateAll()];
-        }
-        if (typeof giantGen92 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen92.generateAll()];
-        }
-        if (typeof giantGen93 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen93.generateAll()];
-        }
-        if (typeof giantGen94 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen94.generateAll()];
-        }
-        if (typeof giantGen95 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen95.generateAll()];
-        }
-        if (typeof giantGen96 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen96.generateAll()];
-        }
-        if (typeof giantGen97 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen97.generateAll()];
-        }
-        if (typeof giantGen98 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen98.generateAll()];
-        }
-        if (typeof giantGen99 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen99.generateAll()];
-        }
-        if (typeof giantGen100 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen100.generateAll()];
-        }
-        if (typeof giantGen101 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen101.generateAll()];
-        }
-        if (typeof giantGen102 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen102.generateAll()];
-        }
-        if (typeof giantGen103 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen103.generateAll()];
-        }
-        if (typeof giantGen104 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen104.generateAll()];
-        }
-        if (typeof giantGen105 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen105.generateAll()];
-        }
-        if (typeof giantGen106 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen106.generateAll()];
-        }
-        if (typeof giantGen107 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen107.generateAll()];
-        }
-        if (typeof giantGen108 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen108.generateAll()];
-        }
-        if (typeof giantGen109 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen109.generateAll()];
-        }
-        if (typeof giantGen110 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen110.generateAll()];
-        }
-        if (typeof giantGen111 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen111.generateAll()];
-        }
-        if (typeof giantGen112 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen112.generateAll()];
-        }
-        if (typeof giantGen113 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen113.generateAll()];
-        }
-        if (typeof giantGen114 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen114.generateAll()];
-        }
-        if (typeof giantGen115 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen115.generateAll()];
-        }
-        if (typeof giantGen116 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen116.generateAll()];
-        }
-        if (typeof giantGen117 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen117.generateAll()];
-        }
-        if (typeof giantGen118 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen118.generateAll()];
-        }
-        if (typeof giantGen119 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen119.generateAll()];
-        }
-        if (typeof giantGen120 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen120.generateAll()];
-        }
-        if (typeof giantGen121 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen121.generateAll()];
-        }
-        if (typeof giantGen122 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen122.generateAll()];
-        }
-        if (typeof giantGen123 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen123.generateAll()];
-        }
-        if (typeof giantGen124 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen124.generateAll()];
-        }
-        if (typeof giantGen125 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen125.generateAll()];
-        }
-        if (typeof giantGen126 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen126.generateAll()];
-        }
-        if (typeof giantGen127 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen127.generateAll()];
-        }
-        if (typeof giantGen128 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen128.generateAll()];
-        }
-        if (typeof giantGen129 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen129.generateAll()];
-        }
-        if (typeof giantGen130 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen130.generateAll()];
-        }
-        if (typeof giantGen131 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen131.generateAll()];
-        }
-        if (typeof giantGen132 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen132.generateAll()];
-        }
-        if (typeof giantGen133 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen133.generateAll()];
-        }
-        if (typeof giantGen134 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen134.generateAll()];
-        }
-        if (typeof giantGen135 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen135.generateAll()];
-        }
-        if (typeof giantGen136 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen136.generateAll()];
-        }
-        if (typeof giantGen137 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen137.generateAll()];
-        }
-        if (typeof giantGen138 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen138.generateAll()];
-        }
-        if (typeof giantGen139 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen139.generateAll()];
-        }
-        if (typeof giantGen140 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen140.generateAll()];
-        }
-        if (typeof giantGen141 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen141.generateAll()];
-        }
-        if (typeof giantGen142 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen142.generateAll()];
-        }
-        if (typeof giantGen143 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen143.generateAll()];
-        }
-        if (typeof giantGen144 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen144.generateAll()];
-        }
-        if (typeof giantGen145 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen145.generateAll()];
-        }
-        if (typeof giantGen146 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen146.generateAll()];
-        }
-        if (typeof giantGen147 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen147.generateAll()];
-        }
-        if (typeof giantGen148 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen148.generateAll()];
-        }
-        if (typeof giantGen149 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen149.generateAll()];
-        }
-        if (typeof giantGen150 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen150.generateAll()];
-        }
-        if (typeof giantGen151 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen151.generateAll()];
-        }
-        if (typeof giantGen152 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen152.generateAll()];
-        }
-        if (typeof giantGen153 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen153.generateAll()];
-        }
-        if (typeof giantGen154 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen154.generateAll()];
-        }
-        if (typeof giantGen155 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen155.generateAll()];
-        }
-        if (typeof giantGen156 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen156.generateAll()];
-        }
-        if (typeof giantGen157 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen157.generateAll()];
-        }
-        if (typeof giantGen158 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen158.generateAll()];
-        }
-        if (typeof giantGen159 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen159.generateAll()];
-        }
-        if (typeof giantGen160 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen160.generateAll()];
-        }
-        if (typeof giantGen161 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen161.generateAll()];
-        }
-        if (typeof giantGen162 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen162.generateAll()];
-        }
-        if (typeof giantGen163 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen163.generateAll()];
-        }
-        if (typeof giantGen164 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen164.generateAll()];
-        }
-        if (typeof giantGen165 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen165.generateAll()];
-        }
-        if (typeof giantGen166 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen166.generateAll()];
-        }
-        if (typeof giantGen167 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen167.generateAll()];
-        }
-        if (typeof giantGen168 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen168.generateAll()];
-        }
-        if (typeof giantGen169 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen169.generateAll()];
-        }
-        if (typeof giantGen170 !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...giantGen170.generateAll()];
-        }
-        // 加载中考真题
+        const generators = [
+            'questionGenerator', 'massGenerator', 'megaGenerator', 'superGenerator',
+            'hugeGenerator', 'ultimateGenerator'
+        ];
+        for (let i = 1; i <= 10; i++) generators.push('extraGenerator' + i);
+        ['A','B','C','D','E','F','G','H','I','J'].forEach(c => generators.push('megaGen' + c));
+        for (let i = 1; i <= 4; i++) generators.push('ultraGen' + i);
+        ['A','B','C','D','E','F','G','H','I','J'].forEach(c => generators.push('massiveGen' + c));
+        for (let i = 1; i <= 175; i++) generators.push('giantGen' + i);
+        for (let i = 1; i <= 3; i++) generators.push('crossSubjectGen' + i);
+
+        generators.forEach(name => {
+            try {
+                const gen = window[name];
+                if (gen && typeof gen.generateAll === 'function') {
+                    questionBank.questions = [...questionBank.questions, ...gen.generateAll()];
+                }
+            } catch(e) {}
+        });
+
         if (typeof examQuestions !== 'undefined') {
             questionBank.questions = [...questionBank.questions, ...examQuestions];
         }
-        // 加载周练题目
         if (typeof weeklyQuestions !== 'undefined') {
             questionBank.questions = [...questionBank.questions, ...weeklyQuestions];
         }
-        // 加载批量导入题目
-        if (typeof newQuestions !== 'undefined') {
-            questionBank.questions = [...questionBank.questions, ...newQuestions];
-        }
     },
 
-    initUnitSelect() {
-        const select = document.getElementById('unitSelect');
-        questionBank.units.forEach(unit => {
-            const option = document.createElement('option');
-            option.value = unit.id;
-            option.textContent = unit.name;
-            select.appendChild(option);
+    renderUnitTags() {
+        const container = document.getElementById('unitGroup');
+        let html = '<button class="tag-btn active" data-unit="">全部</button>';
+        questionBank.units.forEach(u => {
+            html += `<button class="tag-btn" data-unit="${u.id}">${u.name}</button>`;
         });
+        container.innerHTML = html;
     },
+};
 
-    bindEvents() {
-        document.getElementById('filterBtn').addEventListener('click', () => this.filterQuestions());
-        document.getElementById('previewBtn').addEventListener('click', () => this.exportWord());
-        document.getElementById('clearBtn').addEventListener('click', () => this.clearPaper());
-        document.getElementById('printBtn').addEventListener('click', () => window.print());
-        document.querySelector('.close').addEventListener('click', () => this.hideModal());
-        document.getElementById('previewModal').addEventListener('click', (e) => {
-            if (e.target.id === 'previewModal') this.hideModal();
+// 绑定事件
+app.bindEvents = function() {
+    // 搜索
+    document.getElementById('searchBtn').addEventListener('click', () => this.doSearch());
+    document.getElementById('searchInput').addEventListener('keyup', e => {
+        if (e.key === 'Enter') this.doSearch();
+    });
+
+    // 标签筛选代理
+    const tagGroups = [
+        { id: 'unitGroup', key: 'unit', attr: 'unit' },
+        { id: 'typeGroup', key: 'type', attr: 'type' },
+        { id: 'difficultyGroup', key: 'difficulty', attr: 'diff' },
+        { id: 'sourceGroup', key: 'source', attr: 'source' }
+    ];
+    tagGroups.forEach(g => {
+        document.getElementById(g.id).addEventListener('click', e => {
+            const btn = e.target.closest('.tag-btn');
+            if (!btn) return;
+            document.querySelectorAll(`#${g.id} .tag-btn`).forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.filters[g.key] = btn.dataset[g.attr] || '';
+            this.applyFilters();
         });
-    },
+    });
 
-    filterQuestions() {
-        const unit = document.getElementById('unitSelect').value;
-        const type = document.getElementById('typeSelect').value;
-        const difficulty = document.getElementById('difficultySelect').value;
-
-        this.filteredQuestions = questionBank.questions.filter(q => {
-            if (unit && q.unit !== unit) return false;
-            if (type && q.type !== type) return false;
-            if (difficulty && q.difficulty !== difficulty) return false;
-            return true;
-        });
-        this.renderQuestions();
-    },
-
-    renderQuestions() {
-        const container = document.getElementById('questionList');
-        if (this.filteredQuestions.length === 0) {
-            container.innerHTML = '<div class="question-card"><p>没有找到符合条件的试题</p></div>';
-            return;
-        }
-        container.innerHTML = this.filteredQuestions.map(q => this.createQuestionCard(q)).join('');
-    },
-
-    createQuestionCard(q) {
-        const typeMap = { choice: '选择题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
-        const diffMap = { easy: '简单', medium: '中等', hard: '较难' };
-        const unitName = questionBank.units.find(u => u.id === q.unit)?.name || '';
-        const inPaper = this.paper.some(p => p.id === q.id);
-
-        let optionsHtml = '';
-        if (q.options) {
-            optionsHtml = `<div class="question-options">${q.options.map(o => `<div>${o}</div>`).join('')}</div>`;
-        }
-
-        return `
-            <div class="question-card">
-                <div class="question-header">
-                    <div class="question-tags">
-                        <span class="tag-type">${typeMap[q.type]}</span>
-                        <span class="tag-difficulty-${q.difficulty}">${diffMap[q.difficulty]}</span>
-                        <span class="tag-score">${q.score}分</span>
-                    </div>
-                    <button class="btn ${inPaper ? 'btn-remove' : 'btn-add'}" onclick="app.toggleQuestion(${q.id})">
-                        ${inPaper ? '移除' : '加入试卷'}
-                    </button>
-                </div>
-                <div class="question-content">
-                    <strong>[${unitName}]</strong> ${q.content.replace(/\n/g, '<br>')}
-                </div>
-                ${optionsHtml}
-                <details class="question-answer">
-                    <summary>查看答案与解析</summary>
-                    <div class="answer-content">
-                        <p><strong>答案：</strong>${q.answer}</p>
-                        <p><strong>解析：</strong>${q.analysis}</p>
-                    </div>
-                </details>
-            </div>
-        `;
-    }
+    // 重置筛选
+    document.getElementById('resetFilterBtn').addEventListener('click', () => this.resetFilters());
+    // 智能组卷
+    document.getElementById('smartSelectBtn').addEventListener('click', () => this.smartSelect());
+    // 试卷模板
+    document.getElementById('templateSelect').addEventListener('change', e => {
+        if (e.target.value) this.applyTemplate(e.target.value);
+    });
+    // 收藏
+    document.getElementById('showFavBtn').addEventListener('click', () => this.toggleFavorites());
+    // 试卷操作
+    document.getElementById('exportWordBtn').addEventListener('click', () => this.exportWord());
+    document.getElementById('previewBtn').addEventListener('click', () => this.showPreview());
+    document.getElementById('clearBtn').addEventListener('click', () => this.clearPaper());
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    document.getElementById('closePreview').addEventListener('click', () => this.hideModal());
+    document.getElementById('previewModal').addEventListener('click', e => {
+        if (e.target.id === 'previewModal') this.hideModal();
+    });
 };
 
 document.addEventListener('DOMContentLoaded', () => app.init());
 
-// 试卷操作方法
+// 搜索
+app.doSearch = function() {
+    this.filters.keyword = document.getElementById('searchInput').value.trim();
+    this.showingFavorites = false;
+    this.applyFilters();
+};
+
+// 获取题目来源
+app.getSource = function(q) {
+    if (q.unit === 'exam' || q.source === 'exam') return 'exam';
+    if (q.source === 'weekly') return 'weekly';
+    return 'generated';
+};
+
+// 应用筛选
+app.applyFilters = function() {
+    const { unit, type, difficulty, source, keyword } = this.filters;
+    this.filteredQuestions = questionBank.questions.filter(q => {
+        if (unit && q.unit !== unit) return false;
+        if (type && q.type !== type) return false;
+        if (difficulty && q.difficulty !== difficulty) return false;
+        if (source && this.getSource(q) !== source) return false;
+        if (keyword && !q.content.includes(keyword) &&
+            !(q.options && q.options.some(o => o.includes(keyword)))) return false;
+        return true;
+    });
+    this.currentPage = 1;
+    this.renderQuestions();
+};
+
+// 重置筛选
+app.resetFilters = function() {
+    this.filters = { unit: '', type: '', difficulty: '', source: '', keyword: '' };
+    document.getElementById('searchInput').value = '';
+    document.querySelectorAll('.tag-btn').forEach(b => {
+        const isAll = (b.dataset.unit === '' || b.dataset.type === '' ||
+                       b.dataset.diff === '' || b.dataset.source === '');
+        b.classList.toggle('active', isAll);
+    });
+    this.showingFavorites = false;
+    this.filteredQuestions = [...questionBank.questions];
+    this.currentPage = 1;
+    this.renderQuestions();
+};
+
+// 分页渲染
+app.renderQuestions = function() {
+    const container = document.getElementById('questionList');
+    const total = this.filteredQuestions.length;
+    document.getElementById('filteredCount').textContent = total;
+
+    if (total === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>没有找到符合条件的试题</p></div>';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+    }
+
+    const totalPages = Math.ceil(total / this.pageSize);
+    if (this.currentPage > totalPages) this.currentPage = totalPages;
+    const start = (this.currentPage - 1) * this.pageSize;
+    const pageQuestions = this.filteredQuestions.slice(start, start + this.pageSize);
+
+    container.innerHTML = pageQuestions.map((q, i) => this.createQuestionCard(q, start + i + 1)).join('');
+    this.renderPagination(totalPages);
+};
+
+// 分页导航
+app.renderPagination = function(totalPages) {
+    const container = document.getElementById('pagination');
+    if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+    let html = `<button ${this.currentPage === 1 ? 'disabled' : ''} onclick="app.goPage(${this.currentPage - 1})">‹</button>`;
+    const maxShow = 7;
+    let startP = Math.max(1, this.currentPage - 3);
+    let endP = Math.min(totalPages, startP + maxShow - 1);
+    if (endP - startP < maxShow - 1) startP = Math.max(1, endP - maxShow + 1);
+
+    if (startP > 1) html += `<button onclick="app.goPage(1)">1</button><button disabled>...</button>`;
+    for (let i = startP; i <= endP; i++) {
+        html += `<button class="${i === this.currentPage ? 'active' : ''}" onclick="app.goPage(${i})">${i}</button>`;
+    }
+    if (endP < totalPages) html += `<button disabled>...</button><button onclick="app.goPage(${totalPages})">${totalPages}</button>`;
+    html += `<button ${this.currentPage === totalPages ? 'disabled' : ''} onclick="app.goPage(${this.currentPage + 1})">›</button>`;
+    container.innerHTML = html;
+};
+
+app.goPage = function(page) {
+    this.currentPage = page;
+    this.renderQuestions();
+    document.querySelector('.question-area').scrollIntoView({ behavior: 'smooth' });
+};
+
+// 题目卡片
+app.createQuestionCard = function(q, index) {
+    const typeMap = { choice: '选择题', blank: '填空题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
+    const diffMap = { easy: '简单', medium: '中等', hard: '较难' };
+    const sourceMap = { generated: '生成题', exam: '中考真题', weekly: '周练题' };
+    const unitName = questionBank.units.find(u => u.id === q.unit)?.name || '';
+    const inPaper = this.paper.some(p => p.id === q.id);
+    const isFav = this.favorites.includes(q.id);
+    const source = this.getSource(q);
+
+    let optionsHtml = '';
+    if (q.options) {
+        optionsHtml = '<div class="question-options">' +
+            q.options.map(o => `<div class="option-item">${o}</div>`).join('') + '</div>';
+    }
+
+    return `<div class="question-card">
+        <div class="question-header">
+            <div class="question-meta">
+                <span class="q-number">#${index}</span>
+                <div class="question-tags">
+                    <span class="tag-type">${typeMap[q.type]}</span>
+                    <span class="tag-difficulty-${q.difficulty}">${diffMap[q.difficulty]}</span>
+                    <span class="tag-score">${q.score}分</span>
+                    <span class="tag-source">${sourceMap[source]}</span>
+                </div>
+            </div>
+            <div class="question-actions">
+                <button class="fav-btn ${isFav ? 'active' : ''}" onclick="app.toggleFav(${q.id})">${isFav ? '⭐' : '☆'}</button>
+                <button class="btn btn-sm ${inPaper ? 'btn-remove' : 'btn-add'}" onclick="app.toggleQuestion(${q.id})">
+                    ${inPaper ? '移除' : '加入试卷'}
+                </button>
+            </div>
+        </div>
+        <div class="question-content"><strong>[${unitName}]</strong> ${q.content.replace(/\n/g, '<br>')}</div>
+        ${optionsHtml}
+        <details class="question-answer">
+            <summary>查看答案与解析</summary>
+            <div class="answer-content">
+                <p><strong>答案：</strong>${q.answer}</p>
+                <p><strong>解析：</strong>${q.analysis}</p>
+            </div>
+        </details>
+    </div>`;
+};
+
+// 收藏功能
+app.toggleFav = function(id) {
+    const idx = this.favorites.indexOf(id);
+    if (idx > -1) this.favorites.splice(idx, 1);
+    else this.favorites.push(id);
+    localStorage.setItem('bioExamFavorites', JSON.stringify(this.favorites));
+    this.updateFavCount();
+    this.renderQuestions();
+};
+
+app.updateFavCount = function() {
+    document.getElementById('favCount').textContent = this.favorites.length;
+};
+
+app.toggleFavorites = function() {
+    this.showingFavorites = !this.showingFavorites;
+    if (this.showingFavorites) {
+        this.filteredQuestions = questionBank.questions.filter(q => this.favorites.includes(q.id));
+    } else {
+        this.applyFilters();
+        return;
+    }
+    this.currentPage = 1;
+    this.renderQuestions();
+};
+
+// 试卷操作
 app.toggleQuestion = function(id) {
     const question = questionBank.questions.find(q => q.id === id);
     if (!question) return;
-
     const index = this.paper.findIndex(p => p.id === id);
-    if (index > -1) {
-        this.paper.splice(index, 1);
-    } else {
-        this.paper.push(question);
-    }
+    if (index > -1) this.paper.splice(index, 1);
+    else this.paper.push(question);
     this.updatePaperPanel();
     this.renderQuestions();
 };
 
 app.updatePaperPanel = function() {
-    const countEl = document.getElementById('paperCount');
-    const scoreEl = document.getElementById('totalScore');
-    const listEl = document.getElementById('paperList');
-
+    document.getElementById('paperCount').textContent = this.paper.length;
     const totalScore = this.paper.reduce((sum, q) => sum + q.score, 0);
-    countEl.textContent = this.paper.length;
-    scoreEl.textContent = totalScore;
+    document.getElementById('totalScore').textContent = totalScore;
 
-    const typeMap = { choice: '选择', judge: '判断', short: '简答', experiment: '实验' };
-    listEl.innerHTML = this.paper.map((q, i) => `
-        <div class="paper-item">
-            <span>${i + 1}. ${typeMap[q.type]} (${q.score}分)</span>
-            <button class="btn btn-remove" onclick="app.toggleQuestion(${q.id})">移除</button>
+    // 题型统计
+    const typeMap = { choice: '选择', blank: '填空', judge: '判断', short: '简答', experiment: '实验' };
+    const typeCounts = {};
+    this.paper.forEach(q => { typeCounts[q.type] = (typeCounts[q.type] || 0) + 1; });
+    document.getElementById('paperTypeStats').innerHTML = Object.entries(typeCounts)
+        .map(([t, c]) => `<span class="paper-type-stat">${typeMap[t]} ${c}题</span>`).join('');
+
+    // 难度饼图
+    const diffCounts = { easy: 0, medium: 0, hard: 0 };
+    this.paper.forEach(q => { diffCounts[q.difficulty] = (diffCounts[q.difficulty] || 0) + 1; });
+    const total = this.paper.length || 1;
+    const easyPct = (diffCounts.easy / total * 100);
+    const mediumPct = (diffCounts.medium / total * 100);
+    const pie = document.getElementById('difficultyPie');
+    if (this.paper.length === 0) {
+        pie.className = 'pie-chart empty';
+        pie.style.background = '';
+    } else {
+        pie.className = 'pie-chart';
+        pie.style.background = `conic-gradient(var(--easy-color) 0% ${easyPct}%, var(--medium-color) ${easyPct}% ${easyPct + mediumPct}%, var(--hard-color) ${easyPct + mediumPct}% 100%)`;
+    }
+
+    // 试卷列表
+    document.getElementById('paperList').innerHTML = this.paper.map((q, i) => `
+        <div class="paper-item" draggable="true" data-idx="${i}">
+            <span>${i + 1}. ${typeMap[q.type]} (${q.score}分) ${q.content.substring(0, 20)}...</span>
+            <button class="remove-btn" onclick="app.toggleQuestion(${q.id})">✕</button>
         </div>
     `).join('');
+
+    this.initDragSort();
 };
 
+// 拖拽排序
+app.initDragSort = function() {
+    const list = document.getElementById('paperList');
+    let dragIdx = null;
+    list.querySelectorAll('.paper-item').forEach(item => {
+        item.addEventListener('dragstart', e => {
+            dragIdx = parseInt(item.dataset.idx);
+            item.classList.add('dragging');
+        });
+        item.addEventListener('dragend', () => item.classList.remove('dragging'));
+        item.addEventListener('dragover', e => e.preventDefault());
+        item.addEventListener('drop', e => {
+            e.preventDefault();
+            const dropIdx = parseInt(item.dataset.idx);
+            if (dragIdx !== null && dragIdx !== dropIdx) {
+                const moved = this.paper.splice(dragIdx, 1)[0];
+                this.paper.splice(dropIdx, 0, moved);
+                this.updatePaperPanel();
+            }
+        });
+    });
+};
+
+// 智能组卷 (难度比例 3:5:2)
+app.smartSelect = function() {
+    const totalQ = 25;
+    const ratio = { easy: 0.3, medium: 0.5, hard: 0.2 };
+    const counts = {
+        easy: Math.round(totalQ * ratio.easy),
+        medium: Math.round(totalQ * ratio.medium),
+        hard: totalQ - Math.round(totalQ * ratio.easy) - Math.round(totalQ * ratio.medium)
+    };
+
+    this.paper = [];
+    const pool = [...questionBank.questions];
+    ['easy', 'medium', 'hard'].forEach(diff => {
+        const available = pool.filter(q => q.difficulty === diff);
+        const shuffled = available.sort(() => Math.random() - 0.5);
+        this.paper.push(...shuffled.slice(0, counts[diff]));
+    });
+
+    // 按题型排序
+    const typeOrder = { choice: 0, judge: 1, blank: 2, short: 3, experiment: 4 };
+    this.paper.sort((a, b) => (typeOrder[a.type] || 0) - (typeOrder[b.type] || 0));
+
+    this.updatePaperPanel();
+    this.renderQuestions();
+    alert(`智能组卷完成！已选 ${this.paper.length} 题，难度比例 简单:中等:较难 ≈ 3:5:2`);
+};
+
+// 试卷模板
+app.applyTemplate = function(template) {
+    const templates = {
+        midterm: { choice: 15, judge: 5, blank: 5, short: 3, experiment: 2, total: 100 },
+        final: { choice: 20, judge: 5, blank: 5, short: 5, experiment: 3, total: 100 },
+        unit: { choice: 10, judge: 5, blank: 3, short: 2, experiment: 0, total: 50 },
+        weekly: { choice: 8, judge: 4, blank: 3, short: 0, experiment: 0, total: 30 }
+    };
+    const tpl = templates[template];
+    if (!tpl) return;
+
+    this.paper = [];
+    const pool = [...questionBank.questions].sort(() => Math.random() - 0.5);
+    Object.entries(tpl).forEach(([type, count]) => {
+        if (type === 'total') return;
+        const available = pool.filter(q => q.type === type && !this.paper.some(p => p.id === q.id));
+        this.paper.push(...available.slice(0, count));
+    });
+
+    const typeOrder = { choice: 0, judge: 1, blank: 2, short: 3, experiment: 4 };
+    this.paper.sort((a, b) => (typeOrder[a.type] || 0) - (typeOrder[b.type] || 0));
+
+    this.updatePaperPanel();
+    this.renderQuestions();
+    document.getElementById('templateSelect').value = '';
+    const nameMap = { midterm: '期中考试', final: '期末考试', unit: '单元测试', weekly: '周练' };
+    alert(`已应用"${nameMap[template]}"模板，共选 ${this.paper.length} 题`);
+};
+
+// 更新统计面板
+app.updateStats = function() {
+    const qs = questionBank.questions;
+    document.getElementById('statChoice').textContent = qs.filter(q => q.type === 'choice').length;
+    document.getElementById('statBlank').textContent = qs.filter(q => q.type === 'blank').length;
+    document.getElementById('statJudge').textContent = qs.filter(q => q.type === 'judge').length;
+    document.getElementById('statShort').textContent = qs.filter(q => q.type === 'short').length;
+    document.getElementById('statExperiment').textContent = qs.filter(q => q.type === 'experiment').length;
+    document.getElementById('statEasy').textContent = qs.filter(q => q.difficulty === 'easy').length;
+    document.getElementById('statMedium').textContent = qs.filter(q => q.difficulty === 'medium').length;
+    document.getElementById('statHard').textContent = qs.filter(q => q.difficulty === 'hard').length;
+};
+
+// 知识点折叠
+app.toggleFilterGroup = function(groupId) {
+    const group = document.getElementById(groupId);
+    const arrow = document.getElementById(groupId + 'Arrow');
+    group.classList.toggle('collapsed');
+    if (arrow) arrow.classList.toggle('collapsed');
+};
+
+// 清空试卷
 app.clearPaper = function() {
     if (this.paper.length === 0) return;
     if (confirm('确定要清空试卷吗？')) {
@@ -794,170 +430,82 @@ app.clearPaper = function() {
     }
 };
 
+// 预览试卷
 app.showPreview = function() {
-    if (this.paper.length === 0) {
-        alert('请先添加试题到试卷');
-        return;
-    }
-    const preview = document.getElementById('paperPreview');
-    const typeMap = { choice: '选择题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
+    if (this.paper.length === 0) { alert('请先添加试题到试卷'); return; }
+    const typeMap = { choice: '选择题', blank: '填空题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
     const totalScore = this.paper.reduce((sum, q) => sum + q.score, 0);
-
-    // 按题型分组
     const grouped = {};
-    this.paper.forEach(q => {
-        if (!grouped[q.type]) grouped[q.type] = [];
-        grouped[q.type].push(q);
-    });
+    this.paper.forEach(q => { if (!grouped[q.type]) grouped[q.type] = []; grouped[q.type].push(q); });
 
-    let html = `<h2>初中生物测试卷</h2><p style="text-align:center">总分：${totalScore}分</p><hr>`;
+    let html = `<h2 style="text-align:center">初中生物测试卷</h2><p style="text-align:center">总分：${totalScore}分</p><hr>`;
     let qNum = 1;
-    const typeOrder = ['choice', 'judge', 'short', 'experiment'];
-
-    typeOrder.forEach(type => {
+    ['choice', 'blank', 'judge', 'short', 'experiment'].forEach(type => {
         if (!grouped[type]) return;
         const typeScore = grouped[type].reduce((s, q) => s + q.score, 0);
         html += `<h3>${typeMap[type]}（共${grouped[type].length}题，${typeScore}分）</h3>`;
         grouped[type].forEach(q => {
-            html += `<div class="preview-question"><p>${qNum}. ${q.content.replace(/\n/g, '<br>')}（${q.score}分）</p>`;
-            if (q.options) {
-                html += `<div style="padding-left:20px">${q.options.map(o => `<p>${o}</p>`).join('')}</div>`;
-            }
+            html += `<div style="margin:15px 0"><p>${qNum}. ${q.content.replace(/\n/g, '<br>')}（${q.score}分）</p>`;
+            if (q.options) html += `<div style="padding-left:20px">${q.options.map(o => `<p>${o}</p>`).join('')}</div>`;
             html += '</div>';
             qNum++;
         });
     });
 
-    preview.innerHTML = html;
-    document.getElementById('previewModal').style.display = 'block';
+    document.getElementById('paperPreview').innerHTML = html;
+    document.getElementById('previewModal').classList.add('active');
 };
 
 app.hideModal = function() {
-    document.getElementById('previewModal').style.display = 'none';
+    document.getElementById('previewModal').classList.remove('active');
 };
 
-app.showStats = function() {
-    const total = questionBank.questions.length;
-    const stats = {
-        choice: questionBank.questions.filter(q => q.type === 'choice').length,
-        judge: questionBank.questions.filter(q => q.type === 'judge').length,
-        short: questionBank.questions.filter(q => q.type === 'short').length,
-        experiment: questionBank.questions.filter(q => q.type === 'experiment').length
-    };
-    console.log(`题库统计：共${total}题（选择${stats.choice}、判断${stats.judge}、简答${stats.short}、实验${stats.experiment}）`);
-};
-
-// 将HTML中的相对图片路径转为base64
-app.convertImagesToBase64 = async function(html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const imgs = doc.querySelectorAll('img');
-    const baseUrl = window.location.href.replace(/\/[^/]*$/, '/');
-
-    for (const img of imgs) {
-        const src = img.getAttribute('src');
-        if (!src || src.startsWith('data:')) continue;
-        const fullUrl = src.startsWith('http') ? src : baseUrl + src;
-        try {
-            const resp = await fetch(fullUrl);
-            const blob = await resp.blob();
-            const base64 = await new Promise(resolve => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.readAsDataURL(blob);
-            });
-            img.setAttribute('src', base64);
-        } catch (e) {
-            console.warn('图片转换失败:', src, e);
-        }
-    }
-    return doc.documentElement.outerHTML;
-};
-
-// Word导出功能
-app.exportWord = async function() {
-    if (this.paper.length === 0) {
-        alert('请先添加试题到试卷');
-        return;
-    }
-
-    const typeMap = { choice: '选择题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
+// Word导出
+app.exportWord = function() {
+    if (this.paper.length === 0) { alert('请先添加试题到试卷'); return; }
+    const typeMap = { choice: '选择题', blank: '填空题', judge: '判断题', short: '简答题', experiment: '实验探究题' };
     const totalScore = this.paper.reduce((sum, q) => sum + q.score, 0);
-
-    // 按题型分组
     const grouped = {};
-    this.paper.forEach(q => {
-        if (!grouped[q.type]) grouped[q.type] = [];
-        grouped[q.type].push(q);
-    });
+    this.paper.forEach(q => { if (!grouped[q.type]) grouped[q.type] = []; grouped[q.type].push(q); });
 
-    // 生成Word文档内容
-    let html = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-        <head>
-            <meta charset="utf-8">
-            <title>初中生物测试卷</title>
-            <style>
-                body { font-family: 宋体, SimSun, serif; font-size: 12pt; line-height: 1.8; }
-                h1 { text-align: center; font-size: 18pt; margin-bottom: 5px; }
-                h2 { text-align: center; font-size: 12pt; font-weight: normal; margin-top: 5px; }
-                h3 { font-size: 14pt; margin: 20px 0 10px 0; }
-                .question { margin: 15px 0; }
-                .options { margin-left: 20px; }
-                .option { margin: 5px 0; }
-                img { max-width: 300px; max-height: 200px; vertical-align: middle; }
-                .answer-area { border-bottom: 1px solid #000; height: 100px; margin: 10px 0; }
-                table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                td { border: 1px solid #000; padding: 8px; text-align: center; }
-            </style>
-        </head>
-        <body>
-            <h1>初中生物测试卷</h1>
-            <h2>（满分：${totalScore}分）</h2>
-            <table>
-                <tr><td>姓名</td><td style="width:150px"></td><td>班级</td><td style="width:150px"></td><td>得分</td><td style="width:100px"></td></tr>
-            </table>
-    `;
+    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta charset="utf-8"><title>初中生物测试卷</title>
+    <style>body{font-family:宋体,SimSun,serif;font-size:12pt;line-height:1.8}
+    h1{text-align:center;font-size:18pt;margin-bottom:5px}
+    h2{text-align:center;font-size:12pt;font-weight:normal;margin-top:5px}
+    h3{font-size:14pt;margin:20px 0 10px}
+    .question{margin:15px 0}.options{margin-left:20px}.option{margin:5px 0}
+    .answer-area{border-bottom:1px solid #000;height:100px;margin:10px 0}
+    table{width:100%;border-collapse:collapse;margin:20px 0}
+    td{border:1px solid #000;padding:8px;text-align:center}</style></head>
+    <body><h1>初中生物测试卷</h1><h2>（满分：${totalScore}分）</h2>
+    <table><tr><td>姓名</td><td style="width:150px"></td><td>班级</td><td style="width:150px"></td><td>得分</td><td style="width:100px"></td></tr></table>`;
 
     let qNum = 1;
-    const typeOrder = ['choice', 'judge', 'short', 'experiment'];
-
+    const typeOrder = ['choice', 'blank', 'judge', 'short', 'experiment'];
     typeOrder.forEach(type => {
         if (!grouped[type]) return;
         const typeScore = grouped[type].reduce((s, q) => s + q.score, 0);
         html += `<h3>${typeMap[type]}（共${grouped[type].length}题，${typeScore}分）</h3>`;
-
         grouped[type].forEach(q => {
             html += `<div class="question"><p>${qNum}. ${q.content.replace(/\n/g, '<br>')}（${q.score}分）</p>`;
-
             if (q.options) {
                 html += '<div class="options">';
-                q.options.forEach(o => {
-                    html += `<div class="option">${o}</div>`;
-                });
+                q.options.forEach(o => { html += `<div class="option">${o}</div>`; });
                 html += '</div>';
             }
-
-            if (q.type === 'short' || q.type === 'experiment') {
-                html += '<div class="answer-area"></div>';
-            }
-
+            if (q.type === 'short' || q.type === 'experiment') html += '<div class="answer-area"></div>';
             html += '</div>';
             qNum++;
         });
     });
 
-    // 添加答案页
-    html += `
-        <div style="page-break-before: always;"></div>
-        <h1>参考答案</h1>
-    `;
-
+    // 答案页
+    html += '<div style="page-break-before:always"></div><h1>参考答案</h1>';
     qNum = 1;
     typeOrder.forEach(type => {
         if (!grouped[type]) return;
         html += `<h3>${typeMap[type]}</h3><p>`;
-
         grouped[type].forEach((q, idx) => {
             if (q.type === 'choice' || q.type === 'judge') {
                 html += `${qNum}. ${q.answer}　　`;
@@ -969,14 +517,9 @@ app.exportWord = async function() {
         });
         html += '</p>';
     });
-
     html += '</body></html>';
 
-    // 将图片转为base64嵌入
-    html = await this.convertImagesToBase64(html);
-
-    // 创建Blob并下载
-    const blob = new Blob(['\ufeff' + html], { type: 'application/msword;charset=utf-8' });
+    const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -985,6 +528,5 @@ app.exportWord = async function() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-
     alert('试卷已导出为Word文档！');
 };

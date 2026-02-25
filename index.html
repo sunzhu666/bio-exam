@@ -3,67 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>初中生物组卷系统</title>
+    <title>初中生物智能组卷系统</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header">
-        <h1>初中生物组卷系统</h1>
-        <p>符合教育部《义务教育生物学课程标准(2022年版)》 | 题库共 <span id="totalQuestions">0</span> 道试题</p>
+    <!-- 顶部导航栏 -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <div class="logo">🧬 初中生物智能组卷</div>
+        </div>
+        <div class="navbar-center">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索题目内容...">
+                <button id="searchBtn" class="search-btn">搜索</button>
+            </div>
+        </div>
+        <div class="navbar-right">
+            <div class="stats-mini">
+                <span class="stat-badge">题库 <strong id="totalQuestions">0</strong> 题</span>
+            </div>
+        </div>
     </header>
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="filter-section">
-                <h3>知识点筛选</h3>
-                <select id="unitSelect">
-                    <option value="">全部单元</option>
-                </select>
+    <!-- 题库统计面板 -->
+    <div class="stats-panel" id="statsPanel">
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-info"><span class="stat-num" id="statChoice">0</span><span class="stat-label">选择题</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✏️</div>
+            <div class="stat-info"><span class="stat-num" id="statBlank">0</span><span class="stat-label">填空题</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info"><span class="stat-num" id="statJudge">0</span><span class="stat-label">判断题</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-info"><span class="stat-num" id="statShort">0</span><span class="stat-label">简答题</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔬</div>
+            <div class="stat-info"><span class="stat-num" id="statExperiment">0</span><span class="stat-label">实验探究</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-easy">●</div>
+            <div class="stat-info"><span class="stat-num" id="statEasy">0</span><span class="stat-label">简单</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-medium">●</div>
+            <div class="stat-info"><span class="stat-num" id="statMedium">0</span><span class="stat-label">中等</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-hard">●</div>
+            <div class="stat-info"><span class="stat-num" id="statHard">0</span><span class="stat-label">较难</span></div>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-layout">
+        <!-- 左侧筛选栏 -->
+        <aside class="filter-sidebar" id="filterSidebar">
+            <h3 class="filter-title">筛选条件</h3>
+            <!-- 知识点树形标签 -->
+            <div class="filter-group">
+                <div class="filter-group-header" onclick="app.toggleFilterGroup('unitGroup')">
+                    <span>📖 知识点</span><span class="arrow" id="unitGroupArrow">▼</span>
+                </div>
+                <div class="filter-tags" id="unitGroup"></div>
             </div>
-            <div class="filter-section">
-                <h3>题型筛选</h3>
-                <select id="typeSelect">
-                    <option value="">全部题型</option>
-                    <option value="choice">选择题</option>
-                    <option value="judge">判断题</option>
-                    <option value="short">简答题</option>
-                    <option value="experiment">实验探究题</option>
-                </select>
+            <!-- 题型标签 -->
+            <div class="filter-group">
+                <div class="filter-group-header">📋 题型</div>
+                <div class="filter-tags" id="typeGroup">
+                    <button class="tag-btn tag-type active" data-type="">全部</button>
+                    <button class="tag-btn tag-type" data-type="choice">选择题</button>
+                    <button class="tag-btn tag-type" data-type="blank">填空题</button>
+                    <button class="tag-btn tag-type" data-type="judge">判断题</button>
+                    <button class="tag-btn tag-type" data-type="short">简答题</button>
+                    <button class="tag-btn tag-type" data-type="experiment">实验探究</button>
+                </div>
             </div>
-            <div class="filter-section">
-                <h3>难度筛选</h3>
-                <select id="difficultySelect">
-                    <option value="">全部难度</option>
-                    <option value="easy">简单</option>
-                    <option value="medium">中等</option>
-                    <option value="hard">较难</option>
-                </select>
+            <!-- 难度标签 -->
+            <div class="filter-group">
+                <div class="filter-group-header">📊 难度</div>
+                <div class="filter-tags" id="difficultyGroup">
+                    <button class="tag-btn tag-diff active" data-diff="">全部</button>
+                    <button class="tag-btn tag-diff tag-easy" data-diff="easy">简单</button>
+                    <button class="tag-btn tag-diff tag-medium" data-diff="medium">中等</button>
+                    <button class="tag-btn tag-diff tag-hard" data-diff="hard">较难</button>
+                </div>
             </div>
-            <button id="filterBtn" class="btn btn-primary">筛选试题</button>
+            <!-- 来源筛选 -->
+            <div class="filter-group">
+                <div class="filter-group-header">📌 来源</div>
+                <div class="filter-tags" id="sourceGroup">
+                    <button class="tag-btn tag-source active" data-source="">全部</button>
+                    <button class="tag-btn tag-source" data-source="generated">生成题</button>
+                    <button class="tag-btn tag-source" data-source="exam">中考真题</button>
+                    <button class="tag-btn tag-source" data-source="weekly">周练题</button>
+                </div>
+            </div>
+            <button class="btn btn-block btn-outline" id="resetFilterBtn">重置筛选</button>
         </aside>
 
-        <main class="main-content">
+        <!-- 中间题目列表 -->
+        <main class="question-area">
+            <div class="question-toolbar" id="questionToolbar">
+                <div class="toolbar-left">
+                    <span class="result-count">共 <strong id="filteredCount">0</strong> 题</span>
+                    <button class="btn btn-sm btn-accent" id="smartSelectBtn">⚡ 智能组卷</button>
+                    <select id="templateSelect" class="template-select">
+                        <option value="">选择试卷模板...</option>
+                        <option value="midterm">期中考试</option>
+                        <option value="final">期末考试</option>
+                        <option value="unit">单元测试</option>
+                        <option value="weekly">周练</option>
+                    </select>
+                </div>
+                <div class="toolbar-right">
+                    <button class="btn btn-sm" id="showFavBtn">⭐ 我的收藏 (<span id="favCount">0</span>)</button>
+                </div>
+            </div>
             <div class="question-list" id="questionList"></div>
+            <div class="pagination" id="pagination"></div>
         </main>
 
-        <aside class="paper-panel">
-            <h3>我的试卷 <span id="paperCount">0</span>题</h3>
-            <div class="paper-info">
-                <p>总分：<span id="totalScore">0</span>分</p>
+        <!-- 右侧试卷面板 -->
+        <aside class="paper-sidebar" id="paperSidebar">
+            <h3 class="paper-title">📄 我的试卷</h3>
+            <div class="paper-stats">
+                <div class="paper-stat"><span class="paper-stat-num" id="paperCount">0</span><span>题</span></div>
+                <div class="paper-stat"><span class="paper-stat-num" id="totalScore">0</span><span>分</span></div>
             </div>
-            <div id="paperList" class="paper-list"></div>
+            <!-- 难度分布饼图 -->
+            <div class="pie-chart-wrap">
+                <div class="pie-chart" id="difficultyPie"></div>
+                <div class="pie-legend" id="pieLegend">
+                    <span class="legend-item"><i class="dot dot-easy"></i>简单</span>
+                    <span class="legend-item"><i class="dot dot-medium"></i>中等</span>
+                    <span class="legend-item"><i class="dot dot-hard"></i>较难</span>
+                </div>
+            </div>
+            <!-- 题型统计 -->
+            <div class="paper-type-stats" id="paperTypeStats"></div>
+            <!-- 试卷题目列表 -->
+            <div class="paper-list" id="paperList"></div>
             <div class="paper-actions">
-                <button id="previewBtn" class="btn btn-primary">导出Word</button>
-                <button id="clearBtn" class="btn btn-danger">清空试卷</button>
+                <button class="btn btn-primary btn-block" id="exportWordBtn">📥 导出Word</button>
+                <button class="btn btn-outline btn-block" id="previewBtn">👁 预览试卷</button>
+                <button class="btn btn-danger btn-block" id="clearBtn">🗑 清空试卷</button>
             </div>
         </aside>
     </div>
 
+    <!-- 预览弹窗 -->
     <div id="previewModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="paperPreview"></div>
-            <button id="printBtn" class="btn btn-primary">打印试卷</button>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>试卷预览</h3>
+                <span class="modal-close" id="closePreview">&times;</span>
+            </div>
+            <div class="modal-body" id="paperPreview"></div>
+            <div class="modal-footer">
+                <button id="printBtn" class="btn btn-primary">打印试卷</button>
+            </div>
         </div>
     </div>
 
@@ -278,11 +383,16 @@
     <script src="giantGen168.js"></script>
     <script src="giantGen169.js"></script>
     <script src="giantGen170.js"></script>
+    <script src="giantGen171.js"></script>
+    <script src="giantGen172.js"></script>
+    <script src="giantGen173.js"></script>
+    <script src="giantGen174.js"></script>
+    <script src="giantGen175.js"></script>
     <script src="crossSubjectGen1.js"></script>
     <script src="crossSubjectGen2.js"></script>
     <script src="crossSubjectGen3.js"></script>
     <script src="examQuestions.js"></script>
-        <script src="weeklyQuestions.js"></script>
+    <script src="weeklyQuestions.js"></script>
     <script src="newQuestions.js"></script>
     <script src="app.js"></script>
 </body>
